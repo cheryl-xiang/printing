@@ -1,0 +1,45 @@
+# Linux environment for running scPrinter footprinting on NRP.
+# scPrinter itself is installed separately with `pip install --no-deps` (see scripts/run_on_nrp.sh)
+# so pip can't replace conda's numpy / pytorch.
+name: scprinter
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.11
+  - pytorch
+  - numpy
+  - pandas
+  - scipy
+  - h5py
+  - pybigwig
+  - pybedtools
+  - bedtools
+  - samtools
+  - htslib
+  - anndata>0.8.0
+  - scanpy>=1.9
+  - snapatac2
+  - pyfaidx
+  - pyranges
+  - polars
+  - pyarrow
+  - bioframe
+  - biopython
+  - plotly
+  - dna_features_viewer
+  - gffutils
+  - logomaker
+  - shap
+  - adjusttext
+  - moods
+  - wandb
+  - seaborn
+  - matplotlib
+  - tqdm
+  - ipykernel
+  - papermill
+  - git          # needed to pip-install scPrinter from GitHub
+  - pip
+  - pip:
+      - tangermeme

@@ -1,0 +1,4 @@
+min_cuts > 100
+log2FC > 0.75
+dex-responsive sites: 1180 (footprinted: 1180)
+control sites: 500

@@ -1,0 +1,22 @@
+# Short-lived pod used only to copy files to/from the PVC with `kubectl cp`
+# (upload code + BAMs before a run, download results after).
+# Delete it as soon as the upload is done:  kubectl delete pod gr-upload
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gr-upload
+  namespace: ucsd-ubellur-ugcapstone-d06
+spec:
+  containers:
+    - name: upload
+      image: ubuntu:22.04
+      command: ["sleep", "21600"]   # 6 h max; delete the pod when finished
+      resources:
+        requests: { cpu: "1", memory: 2Gi }
+        limits:   { cpu: "1", memory: 2Gi }
+      volumeMounts:
+        - { name: data, mountPath: /data }
+  volumes:
+    - name: data
+      persistentVolumeClaim: { claimName: gr-data }
+  restartPolicy: Never

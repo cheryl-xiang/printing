@@ -1,0 +1,15 @@
+# Persistent storage for BAMs, fragments, scPrinter cache, conda env and results.
+# Check NRP's storage docs for the right storageClassName for your region
+# (e.g. rook-cephfs or a regional variant) before applying.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gr-data
+  namespace: ucsd-ubellur-ugcapstone-d06
+spec:
+  storageClassName: rook-cephfs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Gi

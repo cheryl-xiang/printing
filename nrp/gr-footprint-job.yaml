@@ -1,0 +1,34 @@
+# NRP batch job: run the footprinting notebook from /data/code and save results on the PVC.
+# Before applying: upload the notebook + scripts to /data/code and the BAMs to /data/bam
+# (see nrp/upload-pod.yaml), and edit the BAM file names below if yours differ.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gr-footprint
+  namespace: ucsd-ubellur-ugcapstone-d06
+spec:
+  backoffLimit: 0                 # don't retry automatically; check the logs instead
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: footprint
+          image: condaforge/miniforge3:latest
+          command: ["bash", "-c"]
+          args:
+            - |
+              bash /data/code/scripts/run_on_nrp.sh
+          env:
+            - { name: N_JOBS,      value: "8" }        # keep equal to the cpu request below
+            - { name: NOTEBOOK,    value: "dex_footprinting.ipynb" }
+            - { name: NODEX_BAM,   value: "D1_DMSO.merged.bam" }
+            - { name: MIN_MAPQ,    value: "0" }        # ENCODE pipeline BAMs are already filtered
+            - { name: DEX_BAM,     value: "D1_Dex.merged.bam" }   # check the real dex file name
+          resources:
+            requests: { cpu: "8", memory: 48Gi, ephemeral-storage: 40Gi }
+            limits:   { cpu: "8", memory: 48Gi, ephemeral-storage: 40Gi }
+          volumeMounts:
+            - { name: data, mountPath: /data }
+      volumes:
+        - name: data
+          persistentVolumeClaim: { claimName: gr-data }
